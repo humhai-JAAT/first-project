@@ -2,3 +2,5 @@ streamlit
 mysql-connector-python
 pandas
 matplotlib
+openai
+python-dotenv  # if you're using .env files
