@@ -1,53 +1,69 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 import pandas as pd
+import plotly.graph_objects as go
 from db_utils import get_student_marks
 
 def show_graph(username):
-    st.subheader("📊 Marks Graph")
+    st.subheader("📊 Marks Graph (Interactive)")
 
-    df = get_student_marks(username)
+    # Step 1: Select semesters
+    selected_sems = st.multiselect(
+        "Select Semester(s):",
+        options=[f"Semester {i}" for i in range(1, 10)],
+        default=["Semester 2"]
+    )
 
-    if df.empty:
-        st.info("No data to display.")
+    if not selected_sems:
+        st.warning("Please select at least one semester to continue.")
         return
 
-    # Dropdown for exam selection
+    # Step 2: Get marks based on semester selection
+    df = get_student_marks(username, selected_sems)
+
+    if df.empty:
+        st.info("No data to display for the selected semester(s).")
+        return
+
+    # Step 3: Exam selection
     exam_options = df['Exam'].unique().tolist()
     selected_exams = st.multiselect("Select exam(s) to display:", exam_options, default=exam_options)
 
-    # Dropdown for graph type
+    # Step 4: Graph type selection
     graph_type = st.selectbox("Select graph type:", ["Bar Chart", "Line Chart", "Both"])
 
     if not selected_exams:
         st.warning("Please select at least one exam to display the graph and report.")
         return
 
-    # Filter data
+    # Step 5: Filter and reshape data
     filtered_df = df[df['Exam'].isin(selected_exams)]
-
-    # Reshape the data for plotting
     melted_df = filtered_df.melt(id_vars=["Exam"], var_name="Subject", value_name="Marks")
 
-    # Plotting
-    fig, ax = plt.subplots(figsize=(10, 5))
+    # Step 6: Create interactive figure
+    fig = go.Figure()
 
     for exam in selected_exams:
         exam_data = melted_df[melted_df['Exam'] == exam]
+        subjects = exam_data["Subject"]
+        marks = exam_data["Marks"]
 
         if graph_type in ["Bar Chart", "Both"]:
-            ax.bar(exam_data["Subject"], exam_data["Marks"], alpha=0.6, label=f"{exam} (Bar)")
+            fig.add_trace(go.Bar(x=subjects, y=marks, name=f"{exam} (Bar)", opacity=0.6))
 
         if graph_type in ["Line Chart", "Both"]:
-            ax.plot(exam_data["Subject"], exam_data["Marks"], marker='o', label=f"{exam} (Line)")
+            fig.add_trace(go.Scatter(x=subjects, y=marks, name=f"{exam} (Line)", mode="lines+markers"))
 
-    ax.set_title(f"Subject-wise Marks for {username}")
-    ax.set_xlabel("Subjects")
-    ax.set_ylabel("Marks")
-    ax.legend()
-    st.pyplot(fig)
+    fig.update_layout(
+        title="Subject-wise Marks",
+        xaxis_title="Subjects",
+        yaxis_title="Marks",
+        barmode='group',
+        template='plotly_white'
+    )
 
-    # Report Summary
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Step 7: Report Summary
     st.subheader("📝 Performance Summary")
     report = ""
     for exam in selected_exams:
@@ -58,7 +74,7 @@ def show_graph(username):
 
         remark = "Excellent" if avg >= 80 else "Good" if avg >= 60 else "Needs Improvement"
 
-        report += f"**{exam} Exam**:\n"
+        report += f"**{exam}**:\n"
         report += f"- Average Marks: {avg:.2f}\n"
         report += f"- Highest Marks: {highest}\n"
         report += f"- Lowest Marks: {lowest}\n"
