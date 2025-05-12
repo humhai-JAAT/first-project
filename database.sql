@@ -607,4 +607,179 @@ VALUES
 (9, 'Freedom Fighters Essay', 'Social Science', '2025-06-03', 1),
 (10, 'Novel Summary', 'English', '2025-06-04', 0);
 
+CREATE TABLE books (
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    subject VARCHAR(100),
+    available_copies INT DEFAULT 1
+);
+
+INSERT INTO books (title, author, subject, available_copies) VALUES
+('Introduction to Algorithms', 'Thomas H. Cormen', 'Computer Science', 5),
+('Clean Code', 'Robert C. Martin', 'Programming', 3),
+('The Great Gatsby', 'F. Scott Fitzgerald', 'Literature', 7),
+('A Brief History of Time', 'Stephen Hawking', 'Physics', 2),
+('To Kill a Mockingbird', 'Harper Lee', 'Literature', 4),
+('The Art of Computer Programming', 'Donald Knuth', 'Computer Science', 1),
+('Design Patterns', 'Erich Gamma', 'Programming', 3),
+('Pride and Prejudice', 'Jane Austen', 'Literature', 6),
+('Cosmos', 'Carl Sagan', 'Astronomy', 2),
+('The C Programming Language', 'Brian Kernighan', 'Programming', 4),
+('Data Structures and Algorithms', 'Alfred Aho', 'Computer Science', 3),
+('1984', 'George Orwell', 'Literature', 5),
+('The Selfish Gene', 'Richard Dawkins', 'Biology', 3),
+('JavaScript: The Good Parts', 'Douglas Crockford', 'Programming', 2),
+('The Catcher in the Rye', 'J.D. Salinger', 'Literature', 4),
+('Database System Concepts', 'Abraham Silberschatz', 'Computer Science', 3),
+('Brave New World', 'Aldous Huxley', 'Literature', 3),
+('The Origin of Species', 'Charles Darwin', 'Biology', 1),
+('Python Crash Course', 'Eric Matthes', 'Programming', 5),
+('Lord of the Flies', 'William Golding', 'Literature', 4),
+('Operating System Concepts', 'Abraham Silberschatz', 'Computer Science', 2),
+('The Hobbit', 'J.R.R. Tolkien', 'Fantasy', 6),
+('Artificial Intelligence: A Modern Approach', 'Stuart Russell', 'Computer Science', 2),
+('Frankenstein', 'Mary Shelley', 'Literature', 3),
+('The Elegant Universe', 'Brian Greene', 'Physics', 1),
+('Head First Java', 'Kathy Sierra', 'Programming', 4),
+('Animal Farm', 'George Orwell', 'Literature', 5),
+('The Double Helix', 'James Watson', 'Biology', 2),
+('Learning PHP, MySQL & JavaScript', 'Robin Nixon', 'Programming', 3),
+('The Lord of the Rings', 'J.R.R. Tolkien', 'Fantasy', 4),
+('Computer Networks', 'Andrew Tanenbaum', 'Computer Science', 2),
+('Crime and Punishment', 'Fyodor Dostoevsky', 'Literature', 3),
+('A Short History of Nearly Everything', 'Bill Bryson', 'Science', 4),
+('Eloquent JavaScript', 'Marijn Haverbeke', 'Programming', 3),
+('The Adventures of Huckleberry Finn', 'Mark Twain', 'Literature', 4),
+('Computer Organization and Design', 'David Patterson', 'Computer Science', 2),
+('The Picture of Dorian Gray', 'Oscar Wilde', 'Literature', 3),
+('The Gene: An Intimate History', 'Siddhartha Mukherjee', 'Biology', 2),
+('C++ Primer', 'Stanley Lippman', 'Programming', 3),
+('The Brothers Karamazov', 'Fyodor Dostoevsky', 'Literature', 2),
+('Introduction to the Theory of Computation', 'Michael Sipser', 'Computer Science', 1),
+('The Alchemist', 'Paulo Coelho', 'Fiction', 5),
+('The Hidden Life of Trees', 'Peter Wohlleben', 'Biology', 3),
+('Effective Java', 'Joshua Bloch', 'Programming', 4),
+('One Hundred Years of Solitude', 'Gabriel García Márquez', 'Literature', 3),
+('Computer Architecture', 'John Hennessy', 'Computer Science', 2),
+('The Road', 'Cormac McCarthy', 'Literature', 2),
+('The Pragmatic Programmer', 'Andrew Hunt', 'Programming', 3),
+('The Silent Patient', 'Alex Michaelides', 'Fiction', 4),
+('Deep Learning', 'Ian Goodfellow', 'Computer Science', 1);
+
+CREATE TABLE borrowed_books (
+    borrow_id INT AUTO_INCREMENT PRIMARY KEY,
+    roll_number INT NOT NULL,
+    book_id INT NOT NULL,
+    borrow_date DATE NOT NULL,
+    due_date DATE NOT NULL,
+    return_date DATE DEFAULT NULL,
+    FOREIGN KEY (roll_number) REFERENCES student_details(roll_number),
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
+
+INSERT INTO borrowed_books (roll_number, book_id, borrow_date, due_date, return_date) VALUES
+-- Current borrows (not yet returned)
+(1, 3, '2023-10-01', '2023-10-15', NULL),
+(2, 7, '2023-10-02', '2023-10-16', NULL),
+(3, 12, '2023-10-03', '2023-10-17', NULL),
+(4, 18, '2023-10-04', '2023-10-18', NULL),
+(5, 22, '2023-10-05', '2023-10-19', NULL),
+(6, 27, '2023-10-06', '2023-10-20', NULL),
+(7, 31, '2023-10-07', '2023-10-21', NULL),
+(8, 35, '2023-10-08', '2023-10-22', NULL),
+(9, 40, '2023-10-09', '2023-10-23', NULL),
+(10, 45, '2023-10-10', '2023-10-24', NULL),
+
+-- Returned borrows (on time)
+(1, 5, '2023-09-01', '2023-09-15', '2023-09-14'),
+(2, 8, '2023-09-02', '2023-09-16', '2023-09-15'),
+(3, 11, '2023-09-03', '2023-09-17', '2023-09-16'),
+(4, 14, '2023-09-04', '2023-09-18', '2023-09-17'),
+(5, 19, '2023-09-05', '2023-09-19', '2023-09-18'),
+(6, 23, '2023-09-06', '2023-09-20', '2023-09-19'),
+(7, 28, '2023-09-07', '2023-09-21', '2023-09-20'),
+(8, 32, '2023-09-08', '2023-09-22', '2023-09-21'),
+(9, 37, '2023-09-09', '2023-09-23', '2023-09-22'),
+(10, 42, '2023-09-10', '2023-09-24', '2023-09-23'),
+
+-- Returned borrows (late returns)
+(1, 2, '2023-08-01', '2023-08-15', '2023-08-17'),
+(2, 6, '2023-08-02', '2023-08-16', '2023-08-18'),
+(3, 9, '2023-08-03', '2023-08-17', '2023-08-20'),
+(4, 13, '2023-08-04', '2023-08-18', '2023-08-21'),
+(5, 17, '2023-08-05', '2023-08-19', '2023-08-22'),
+(6, 21, '2023-08-06', '2023-08-20', '2023-08-23'),
+(7, 26, '2023-08-07', '2023-08-21', '2023-08-24'),
+(8, 30, '2023-08-08', '2023-08-22', '2023-08-25'),
+(9, 34, '2023-08-09', '2023-08-23', '2023-08-26'),
+(10, 38, '2023-08-10', '2023-08-24', '2023-08-27'),
+
+-- Recently returned
+(1, 4, '2023-10-05', '2023-10-19', '2023-10-18'),
+(2, 10, '2023-10-06', '2023-10-20', '2023-10-19'),
+(3, 15, '2023-10-07', '2023-10-21', '2023-10-20'),
+(4, 20, '2023-10-08', '2023-10-22', '2023-10-21'),
+(5, 25, '2023-10-09', '2023-10-23', '2023-10-22'),
+(6, 29, '2023-10-10', '2023-10-24', '2023-10-23'),
+(7, 33, '2023-10-11', '2023-10-25', '2023-10-24'),
+(8, 36, '2023-10-12', '2023-10-26', '2023-10-25'),
+(9, 41, '2023-10-13', '2023-10-27', '2023-10-26'),
+(10, 46, '2023-10-14', '2023-10-28', '2023-10-27'),
+
+-- Long-term borrows
+(1, 1, '2023-07-01', '2023-07-15', '2023-07-14'),
+(2, 16, '2023-07-05', '2023-07-19', '2023-07-18'),
+(3, 24, '2023-07-10', '2023-07-24', '2023-07-23'),
+(4, 39, '2023-07-15', '2023-07-29', '2023-07-28'),
+(5, 47, '2023-07-20', '2023-08-03', '2023-08-02'),
+(6, 48, '2023-07-25', '2023-08-08', '2023-08-07'),
+(7, 49, '2023-07-30', '2023-08-13', '2023-08-12'),
+(8, 50, '2023-08-04', '2023-08-18', '2023-08-17'),
+(9, 43, '2023-08-09', '2023-08-23', '2023-08-22'),
+(10, 44, '2023-08-14', '2023-08-28', '2023-08-27');
+
+CREATE TABLE student_fees (
+    fee_id INT AUTO_INCREMENT PRIMARY KEY,
+    roll_number INT NOT NULL,
+    fee_type VARCHAR(100) NOT NULL,           -- e.g., Tuition, Hostel, Lab
+    total_amount DECIMAL(10,2) NOT NULL,
+    paid_amount DECIMAL(10,2) DEFAULT 0.00,
+    due_date DATE NOT NULL,
+    FOREIGN KEY (roll_number) REFERENCES student_credential(roll_number)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE fee_payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    roll_number INT NOT NULL,
+    payment_date DATE NOT NULL DEFAULT (CURRENT_DATE),
+    amount DECIMAL(10,2) NOT NULL,
+    method VARCHAR(50) NOT NULL,              -- e.g., UPI, Cash, Bank Transfer
+    reference_id VARCHAR(100),                -- Optional: transaction/receipt number
+    FOREIGN KEY (roll_number) REFERENCES student_credential(roll_number)
+        ON DELETE CASCADE
+);
+
+-- Insert sample fee records
+INSERT INTO student_fees (roll_number, fee_type, total_amount, paid_amount, due_date) VALUES
+(1, 'Tuition', 50000, 20000, '2025-06-30'),
+(2, 'Tuition', 50000, 50000, '2025-06-30'),
+(3, 'Hostel', 30000, 10000, '2025-06-15'),
+(4, 'Lab Fee', 10000, 0, '2025-07-10'),
+(5, 'Tuition', 50000, 45000, '2025-06-30'),
+(6, 'Hostel', 30000, 30000, '2025-06-15'),
+(7, 'Lab Fee', 10000, 5000, '2025-07-10'),
+(8, 'Tuition', 50000, 0, '2025-06-30'),
+(9, 'Hostel', 30000, 25000, '2025-06-15'),
+(10, 'Lab Fee', 10000, 10000, '2025-07-10');
+
+-- Insert some fee payments
+INSERT INTO fee_payments (roll_number, amount, method, reference_id) VALUES
+(1, 10000, 'UPI', 'TXN12345'),
+(1, 10000, 'Cash', 'TXN12346'),
+(2, 50000, 'Bank Transfer', 'TXN22345'),
+(5, 45000, 'UPI', 'TXN52345'),
+(9, 25000, 'Bank Transfer', 'TXN92345');
+
 
