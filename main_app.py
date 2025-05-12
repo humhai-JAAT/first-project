@@ -5,7 +5,11 @@ from tab_marks import show_marks
 from tab_graph import show_graph
 from chat_bot import chat_bot
 from tab_notification import show_notifications
-
+from tab_attendance import show_attendance  # New import
+from tab_help_box import show_help_box
+from tab_exam_assignment import show_exam_assignments
+from tab_library import show_library
+from tab_fee import show_fee_tab
 
 def login_page():
     st.title("🔐 Student Login")
@@ -27,8 +31,13 @@ def dashboard():
         "👤 Profile", 
         "📄 Marks", 
         "📊 Graph", 
+        "📈 Attendance",  # Added Attendance
         "💬 Chat Bot",
-        "🔔 Notifications"
+        "🔔 Notifications",
+        "📦 Help Box",
+        "📚 Assignments",
+        "📚 Library",
+        "💰 Fee Portal"
     ])
 
     st.title("🎓 Student Dashboard")
@@ -39,15 +48,25 @@ def dashboard():
         show_marks(st.session_state.username)
     elif selection == "📊 Graph":
         show_graph(st.session_state.username)
+    elif selection == "📈 Attendance":  # Handle new tab
+        show_attendance(st.session_state.username)
     elif selection == "💬 Chat Bot":
         chat_bot()
     elif selection == "🔔 Notifications":
         show_notifications(st.session_state.username)
+    elif selection == "📦 Help Box":
+        show_help_box()
+    elif selection == "📚 Assignments":
+        show_exam_assignments(st.session_state.username)
+    elif selection == "📚 Library":
+        show_library(st.session_state.username)
+    elif selection == "💰 Fee Portal":
+        show_fee_tab(st.session_state.username)  
+
 
     if st.sidebar.button("🚪 Logout"):
         st.session_state.clear()  # Clears all session keys
         st.rerun()  # Refresh the app
-
 
 # Initialize session state if not already
 if 'logged_in' not in st.session_state:
